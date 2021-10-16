@@ -1,4 +1,6 @@
+import 'package:chocauto/Arduino.dart';
 import 'package:chocauto/Controllers/AppController.dart';
+import 'package:chocauto/HomePage.dart';
 import 'package:chocauto/login/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.amber,
       ),
-      home: LoginPage(),
+      home: HomePage(),
     );
   }
 }

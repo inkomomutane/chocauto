@@ -1,21 +1,27 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:chocauto/ChocadeiraEstatistica.dart';
-import 'package:chocauto/ChocadeiraEstatisticaGeral.dart';
 import 'package:chocauto/ChocadeiraUI.dart';
+import 'package:chocauto/Controllers/AppController.dart';
+import 'package:chocauto/Models/Chocadeira.dart';
 import 'package:flutter/material.dart';
 
-class EstatisticaScreen extends StatefulWidget {
-  const EstatisticaScreen({Key? key}) : super(key: key);
+class HomePageScreen extends StatefulWidget {
+  const HomePageScreen({Key? key}) : super(key: key);
 
   @override
-  _EstatisticaScreenState createState() => _EstatisticaScreenState();
+  _HomePageScreenState createState() => _HomePageScreenState();
 }
 
-class _EstatisticaScreenState extends State<EstatisticaScreen> {
+class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+
+      ),
       body: Column(
         children: [
           Expanded(
@@ -48,13 +54,16 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
                       ? 2
                       : 1,
               child: ListView.builder(
-                  itemCount: 14,
+                  itemCount: AppController.getChocadeiras().length,
                   itemBuilder: (context, index) => chocadeiras(
+                      chocadeira: AppController.getChocadeiras()
+                          .values
+                          .elementAt(index),
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute<void>(
                             builder: (BuildContext context) =>
-                                ChocadeiraEstatisticaGeral(),
+                                ChocadeiraEstatistica(),
                             fullscreenDialog: true,
                           )),
                       leading: CircleAvatar(
@@ -62,14 +71,26 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
                       ),
                       title: "Chocadeira",
                       subtitle: "Tempretura ",
-                      active: false))),
+                      active: Random().nextBool()))),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xFFffecb3),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => ChocadeiraUI(),
+            fullscreenDialog: true,
+          ),
+        ),
       ),
     );
   }
 
   Widget chocadeiras(
       {required Widget leading,
+      required Chocadeira chocadeira,
       bool active = false,
       required String title,
       required String subtitle,
@@ -82,13 +103,14 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
             child: ListTile(
               leading: leading,
               title: Text(
-                title,
+                chocadeira.nome
+                ,
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
-              subtitle: Text(subtitle),
+              subtitle: Text(chocadeira.bluetoothDevice),
               trailing: Icon(
                 Icons.bluetooth_connected,
-                color: active ? Colors.green : Colors.grey,
+                   color: Colors.grey,
               ),
             ),
             decoration: BoxDecoration(

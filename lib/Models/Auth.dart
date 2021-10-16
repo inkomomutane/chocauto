@@ -1,13 +1,11 @@
-
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
-part  'Auth.g.dart';
+part 'Auth.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: 1)
 class Auth extends HiveObject {
   @HiveField(1)
-
   final String username;
   @HiveField(2)
   final String password;
@@ -21,5 +19,6 @@ class Auth extends HiveObject {
   }
 
   @override
-  String toString() => "{ Username: ${this.username}, Password: ${this.password} }";
+  String toString() =>
+      "{ Username: ${this.username}, Password: ${this.password} }";
 }

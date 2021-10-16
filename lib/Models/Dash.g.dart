@@ -24,13 +24,15 @@ class DashAdapter extends TypeAdapter<Dash> {
       horario: fields[5] as DateTime,
       createdAt: fields[6] as DateTime?,
       updatedAt: fields[7] as DateTime,
+      auth: fields[9] as Auth,
+      chocadeiraId: fields[8] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Dash obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -44,7 +46,11 @@ class DashAdapter extends TypeAdapter<Dash> {
       ..writeByte(6)
       ..write(obj.createdAt)
       ..writeByte(7)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(8)
+      ..write(obj.chocadeiraId)
+      ..writeByte(9)
+      ..write(obj.auth);
   }
 
   @override
@@ -73,6 +79,8 @@ Dash _$DashFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['createdAt'] as String),
     updatedAt: DateTime.parse(json['updatedAt'] as String),
+    auth: Auth.fromJson(json['auth'] as Map<String, dynamic>),
+    chocadeiraId: json['chocadeiraId'] as int,
   );
 }
 
@@ -84,4 +92,6 @@ Map<String, dynamic> _$DashToJson(Dash instance) => <String, dynamic>{
       'horario': instance.horario.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'chocadeiraId': instance.chocadeiraId,
+      'auth': instance.auth,
     };

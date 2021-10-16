@@ -1,4 +1,4 @@
-
+import 'package:chocauto/Models/Auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'Dash.g.dart';
@@ -8,18 +8,24 @@ part 'Dash.g.dart';
 class Dash extends HiveObject {
   @HiveField(1)
   final int id;
-   @HiveField(2)
+  @HiveField(2)
   final double temperetura;
-   @HiveField(3)
+  @HiveField(3)
   final double humidade;
-   @HiveField(4)
+  @HiveField(4)
   final double angulo;
-   @HiveField(5)
+  @HiveField(5)
   final DateTime horario;
-   @HiveField(6)
+  @HiveField(6)
   final DateTime? createdAt;
-   @HiveField(7)
+  @HiveField(7)
   final DateTime updatedAt;
+  
+  @HiveField(8)
+  final int chocadeiraId;
+
+  @HiveField(9)
+  final Auth auth;
 
   Dash(
       {required this.id,
@@ -28,9 +34,12 @@ class Dash extends HiveObject {
       required this.angulo,
       required this.horario,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+       required this.auth,
+      required this.chocadeiraId
+      });
 
-        factory Dash.fromJson(Map<String, dynamic> json) => _$DashFromJson(json);
+  factory Dash.fromJson(Map<String, dynamic> json) => _$DashFromJson(json);
   Map<String, dynamic> toJson() => _$DashToJson(this);
 
   bool isEqual(Dash dash) {

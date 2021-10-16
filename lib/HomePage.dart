@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:chocauto/EstatisticaScreen.dart';
-import 'package:chocauto/HomeScreen.dart';
+import 'package:chocauto/HomePageScreen.dart';
+import 'package:chocauto/HomeScreenx.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,19 +30,20 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
-      backgroundColor: Colors.white,
-      
+      // appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
+      //   backgroundColor: Colors.white,
+
       body: SizedBox.expand(
         child: PageView(
           controller: _pageController,
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
           },
-          children: <Widget>[HomeSceen(), EstatisticaScreen()],
+          children: <Widget>[HomePageScreen(), EstatisticaScreen()],
         ),
       ),
       bottomNavigationBar: BottomNavyBar(
+        backgroundColor: Colors.white,
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);

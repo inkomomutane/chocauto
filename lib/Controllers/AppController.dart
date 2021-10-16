@@ -1,3 +1,4 @@
+import 'package:chocauto/Models/Chocadeira.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:chocauto/Models/Auth.dart';
 import 'package:chocauto/Models/Dash.dart';
@@ -6,13 +7,17 @@ class AppController {
   static Box<Auth> getAuths() => Hive.box<Auth>('auths');
 
   static Box<Dash> getDashs() => Hive.box<Dash>('dashs');
+  static Box<Chocadeira> getChocadeiras() =>
+      Hive.box<Chocadeira>('chocadeiras');
 
   static Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(AuthAdapter());
     Hive.registerAdapter(DashAdapter());
+    Hive.registerAdapter(ChocadeiraAdapter());
     await Hive.openBox<Auth>('auths');
     await Hive.openBox<Dash>('dashs');
+    await Hive.openBox<Chocadeira>('chocadeiras');
   }
 
   static bool register(Auth auth) {
@@ -56,7 +61,7 @@ class AppController {
         dashs.forEach((element) {
           media += element.temperetura;
         });
-        return (media / dashs.length); 
+        return (media / dashs.length);
       } else {
         return 0.0;
       }
@@ -65,7 +70,7 @@ class AppController {
     }
   }
 
-    static double humidadeMedia(DateTime inico, DateTime fim,String nome) {
+  static double humidadeMedia(DateTime inico, DateTime fim, String nome) {
     try {
       var dashs = getDashs().values.where((element) {
         return (element.horario == inico || element.horario.isAfter(inico)) &&
@@ -76,7 +81,7 @@ class AppController {
         dashs.forEach((element) {
           media += element.humidade;
         });
-        return (media / dashs.length); 
+        return (media / dashs.length);
       } else {
         return 0.0;
       }
