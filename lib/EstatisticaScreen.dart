@@ -4,6 +4,10 @@ import 'package:chocauto/ChocadeiraEstatistica.dart';
 import 'package:chocauto/ChocadeiraEstatisticaGeral.dart';
 import 'package:chocauto/ChocadeiraUI.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'Controllers/AppController.dart';
+import 'Models/Chocadeira.dart';
 
 class EstatisticaScreen extends StatefulWidget {
   const EstatisticaScreen({Key? key}) : super(key: key);
@@ -16,6 +20,10 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -29,7 +37,7 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
                         leading: CircleAvatar(
                           child: Icon(Icons.thermostat),
                         ),
-                        subtitle: Text("xdddddddddddddddddd"),
+                        subtitle: Text(""),
                         title: Text("Cocadeiras "),
                       )
                     ],
@@ -42,27 +50,32 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
             ),
           ),
           Expanded(
-              flex: MediaQuery.of(context).size.height > 450
-                  ? 4
-                  : MediaQuery.of(context).size.height > 350
-                      ? 2
-                      : 1,
-              child: ListView.builder(
-                  itemCount: 14,
-                  itemBuilder: (context, index) => chocadeiras(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                ChocadeiraEstatisticaGeral(),
-                            fullscreenDialog: true,
-                          )),
-                      leading: CircleAvatar(
-                        backgroundImage: AssetImage('images/logo.png'),
-                      ),
-                      title: "Chocadeira",
-                      subtitle: "Tempretura ",
-                      active: false))),
+            flex: MediaQuery.of(context).size.height > 450
+                ? 4
+                : MediaQuery.of(context).size.height > 350
+                    ? 2
+                    : 1,
+            child: ValueListenableBuilder<Box<Chocadeira>>(
+                valueListenable: AppController.getChocadeiras().listenable(),
+                builder: (context, box, _) {
+                  return ListView.builder(
+                      itemCount: box.length,
+                      itemBuilder: (context, index) => chocadeiras(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    ChocadeiraEstatisticaGeral(),
+                                fullscreenDialog: true,
+                              )),
+                          leading: CircleAvatar(
+                            backgroundImage: AssetImage('images/logo.png'),
+                          ),
+                          title: capitalize(box.getAt(index)!.nome),
+                          subtitle: " ${box.getAt(index)!.bluetoothDevice}",
+                          active: false));
+                }),
+          )
         ],
       ),
     );
@@ -96,5 +109,9 @@ class _EstatisticaScreenState extends State<EstatisticaScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(25))),
           ),
         ));
+  }
+
+  capitalize(String title) {
+    return title.substring(0, 1).toUpperCase() + title.substring(1);
   }
 }

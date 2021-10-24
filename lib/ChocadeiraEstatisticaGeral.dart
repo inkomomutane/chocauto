@@ -1,5 +1,9 @@
 import 'package:chocauto/Components/LabelComponent.dart';
+import 'package:chocauto/Controllers/AppController.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'Models/Dash.dart';
 
 class ChocadeiraEstatisticaGeral extends StatefulWidget {
   const ChocadeiraEstatisticaGeral({Key? key}) : super(key: key);
@@ -47,7 +51,7 @@ class _ChocadeiraEstatisticaGeralState
                           child: Row(
                             children: [
                               Text(
-                                '27.0 ',
+                                '${mediaDashs()[0]}',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 35,
@@ -83,7 +87,7 @@ class _ChocadeiraEstatisticaGeralState
                           child: Row(
                             children: [
                               Text(
-                                '58.6',
+                                '${mediaDashs()[1]}',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 35,
@@ -116,14 +120,15 @@ class _ChocadeiraEstatisticaGeralState
                       ? 2
                       : 1,
               child: ListView.builder(
-                  itemCount: 894,
-                  itemBuilder: (context, index) => card(dash: "$index"))),
+                  itemCount: AppController.getDashs().length,
+                  itemBuilder: (context, index) => card(
+                      dash: AppController.getDashs().values.elementAt(index)))),
         ],
       ),
     );
   }
 
-  Widget card({String dash = ""}) {
+  Widget card({required Dash dash}) {
     return Padding(
       padding: EdgeInsets.only(top: 5, left: 25, right: 25),
       child: Container(
@@ -131,7 +136,11 @@ class _ChocadeiraEstatisticaGeralState
           padding: EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text("12-15-2021"), Text('T: 25⁰c'), Text('H: 55.5%')],
+            children: [
+              Text("${DateFormat("dd-M-yyyy").format(dash.createdAt)}"),
+              Text('T: ${dash.temperetura}⁰c'),
+              Text('H: ${dash.humidade}%')
+            ],
           ),
         ),
         decoration: BoxDecoration(
@@ -139,5 +148,20 @@ class _ChocadeiraEstatisticaGeralState
             borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
     );
+  }
+
+  List<int> mediaDashs() {
+    var dashs = AppController.getDashs().values.toList();
+    var hm = 0.0;
+    var tmp = 0.0;
+
+    if (dashs.isNotEmpty) {
+      dashs.forEach((element) {
+        hm += element.humidade;
+        tmp += element.temperetura;
+      });
+      return [(tmp ~/ dashs.length).toInt(), (hm ~/ dashs.length).toInt()];
+    } else
+      return [0, 0];
   }
 }

@@ -7,7 +7,7 @@ part 'Dash.g.dart';
 @HiveType(typeId: 2)
 class Dash extends HiveObject {
   @HiveField(1)
-  final int id;
+  final String id;
   @HiveField(2)
   final double temperetura;
   @HiveField(3)
@@ -17,12 +17,12 @@ class Dash extends HiveObject {
   @HiveField(5)
   final DateTime horario;
   @HiveField(6)
-  final DateTime? createdAt;
+  final DateTime createdAt;
   @HiveField(7)
   final DateTime updatedAt;
   
   @HiveField(8)
-  final int chocadeiraId;
+  final String chocadeiraId;
 
   @HiveField(9)
   final Auth auth;

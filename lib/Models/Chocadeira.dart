@@ -7,7 +7,7 @@ part 'Chocadeira.g.dart';
 @HiveType(typeId: 3)
 class Chocadeira extends HiveObject {
   @HiveField(1)
-  final int id;
+  final String id;
   @HiveField(2)
   final String nome;
   @HiveField(3)

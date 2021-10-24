@@ -49,6 +49,10 @@ dependencies:
   fl_chart: ^0.40.0
   syncfusion_flutter_core: ^19.3.44
   animations: ^2.0.1
+  syncfusion_flutter_gauges: ^19.3.46
+  syncfusion_flutter_datepicker: ^19.3.46
+  syncfusion_flutter_charts: ^19.3.46
+  material_floating_search_bar: ^0.3.6
 
 dev_dependencies:
   flutter_native_splash: ^1.2.1

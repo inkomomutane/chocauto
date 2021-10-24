@@ -1,4 +1,3 @@
-import 'package:chocauto/Arduino.dart';
 import 'package:chocauto/Controllers/AppController.dart';
 import 'package:chocauto/HomePage.dart';
 import 'package:chocauto/login/login_page.dart';

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chocauto/Arduino.dart';
 import 'package:chocauto/Components/LabelComponent.dart';
 import 'package:chocauto/Components/SelectComponent.dart';
 import 'package:chocauto/Components/TextComponent.dart';
@@ -7,8 +6,7 @@ import 'package:chocauto/Controllers/AppController.dart';
 import 'package:chocauto/Models/Chocadeira.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-
-import 'Models/Auth.dart';
+import 'package:uuid/uuid.dart';
 
 class ChocadeiraUI extends StatefulWidget {
   const ChocadeiraUI({Key? key}) : super(key: key);
@@ -41,9 +39,12 @@ class _ChocadeiraUIState extends State<ChocadeiraUI> {
   StreamSubscription<BluetoothDiscoveryResult>? _discoveryStreamSubscription;
   bool _isDiscovering = false;
 
+  TextEditingController? textEditingController;
+  String name = "";
   @override
   void initState() {
     super.initState();
+    name = "";
 
     _isDiscovering = widget.checkAvailability;
 
@@ -126,7 +127,6 @@ class _ChocadeiraUIState extends State<ChocadeiraUI> {
       var list = devices.map((e) => e.device).toList();
       var str = devices.map((e) => e.device.name).toList();
       BluetoothDevice device = list.first;
-      String name = "";
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -148,8 +148,9 @@ class _ChocadeiraUIState extends State<ChocadeiraUI> {
                       name = value;
                     }),
                     onSaved: (value) => setState(() {
-                      name = value ?? "";
+                      name = value != null ? value : "";
                     }),
+                    controller: textEditingController,
                     validator: (string) {
                       if (string == null || string.length < 1)
                         return "Insira o nome da chocadeira";
@@ -175,8 +176,9 @@ class _ChocadeiraUIState extends State<ChocadeiraUI> {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
               await AppController.getChocadeiras().add(new Chocadeira(
-                  id: 1,
+                  id: Uuid().v4(),
                   nome: name,
                   bluetoothDevice: device.address,
                   createdAt: DateTime.now(),

@@ -17,7 +17,7 @@ class ChocadeiraAdapter extends TypeAdapter<Chocadeira> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Chocadeira(
-      id: fields[1] as int,
+      id: fields[1] as String,
       nome: fields[2] as String,
       bluetoothDevice: fields[3] as String,
       createdAt: fields[4] as DateTime?,

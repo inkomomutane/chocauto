@@ -1,5 +1,4 @@
-// ignore: library_names
-library navBar;
+library bottom_navy_bar;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,8 +8,8 @@ import 'package:flutter/widgets.dart';
 ///
 /// Update [selectedIndex] to change the selected item.
 /// [selectedIndex] is required and must not be null.
-class BottomNavyBar extends StatelessWidget {
-  BottomNavyBar({
+class NavyBar extends StatelessWidget {
+  NavyBar({
     Key? key,
     this.selectedIndex = 0,
     this.showElevation = true,
@@ -73,8 +72,8 @@ class BottomNavyBar extends StatelessWidget {
         boxShadow: [
           if (showElevation)
             const BoxShadow(
-              color: Colors.black26,
-              blurRadius: 1,
+              color: Colors.black12,
+              blurRadius: 2,
             ),
         ],
       ),
@@ -138,8 +137,7 @@ class _ItemWidget extends StatelessWidget {
         duration: animationDuration,
         curve: curve,
         decoration: BoxDecoration(
-          color:
-              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
+          color: isSelected ? item.activeColor : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(
@@ -157,7 +155,7 @@ class _ItemWidget extends StatelessWidget {
                   data: IconThemeData(
                     size: iconSize,
                     color: isSelected
-                        ? item.activeColor.withOpacity(1)
+                        ? item.activeColor
                         : item.inactiveColor == null
                             ? item.activeColor
                             : item.inactiveColor,

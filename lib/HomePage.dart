@@ -1,8 +1,11 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'dart:ui';
+
 import 'package:chocauto/EstatisticaScreen.dart';
 import 'package:chocauto/HomePageScreen.dart';
-import 'package:chocauto/HomeScreenx.dart';
+import 'package:chocauto/TestUi.dart';
 import 'package:flutter/material.dart';
+
+import 'Components/NavBar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,11 +42,12 @@ class _HomePageState extends State<HomePage> {
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
           },
-          children: <Widget>[HomePageScreen(), EstatisticaScreen()],
+          children: <Widget>[TestUI(),TestUI()],
         ),
       ),
-      bottomNavigationBar: BottomNavyBar(
-        backgroundColor: Colors.white,
+      bottomNavigationBar: NavyBar(
+        backgroundColor: Color(0xFFefefef),
+        showElevation: false,
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
@@ -51,13 +55,25 @@ class _HomePageState extends State<HomePage> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              title: Text('Home'),
-              icon: Icon(Icons.apps),
-              activeColor: Colors.amber.shade900),
+              title: Text(
+                'Home',
+                style: TextStyle(color: Colors.grey.shade800),
+              ),
+              icon: Icon(
+                Icons.apps,
+                color: Colors.grey.shade800,
+              ),
+              activeColor: Colors.white),
           BottomNavyBarItem(
-              title: Text('Estatísticas'),
-              icon: Icon(Icons.add_chart_outlined),
-              activeColor: Colors.grey.shade700),
+              title: Text(
+                'Estatísticas',
+                style: TextStyle(color: Colors.grey.shade800),
+              ),
+              icon: Icon(
+                Icons.add_chart_outlined,
+                color: Colors.grey.shade800,
+              ),
+              activeColor: Colors.white.withOpacity(1)),
         ],
       ),
     );

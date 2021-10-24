@@ -17,15 +17,15 @@ class DashAdapter extends TypeAdapter<Dash> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Dash(
-      id: fields[1] as int,
+      id: fields[1] as String,
       temperetura: fields[2] as double,
       humidade: fields[3] as double,
       angulo: fields[4] as double,
       horario: fields[5] as DateTime,
-      createdAt: fields[6] as DateTime?,
+      createdAt: fields[6] as DateTime,
       updatedAt: fields[7] as DateTime,
       auth: fields[9] as Auth,
-      chocadeiraId: fields[8] as int,
+      chocadeiraId: fields[8] as String,
     );
   }
 
@@ -70,17 +70,15 @@ class DashAdapter extends TypeAdapter<Dash> {
 
 Dash _$DashFromJson(Map<String, dynamic> json) {
   return Dash(
-    id: json['id'] as int,
+    id: json['id'] as String,
     temperetura: (json['temperetura'] as num).toDouble(),
     humidade: (json['humidade'] as num).toDouble(),
     angulo: (json['angulo'] as num).toDouble(),
     horario: DateTime.parse(json['horario'] as String),
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
     updatedAt: DateTime.parse(json['updatedAt'] as String),
     auth: Auth.fromJson(json['auth'] as Map<String, dynamic>),
-    chocadeiraId: json['chocadeiraId'] as int,
+    chocadeiraId: json['chocadeiraId'] as String,
   );
 }
 
@@ -90,7 +88,7 @@ Map<String, dynamic> _$DashToJson(Dash instance) => <String, dynamic>{
       'humidade': instance.humidade,
       'angulo': instance.angulo,
       'horario': instance.horario.toIso8601String(),
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'chocadeiraId': instance.chocadeiraId,
       'auth': instance.auth,
