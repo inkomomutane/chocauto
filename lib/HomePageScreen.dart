@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:chocauto/ChocadeiraEstatistica.dart';
 import 'package:chocauto/ChocadeiraUI.dart';
-import 'package:chocauto/Components/LabelComponent.dart';
 import 'package:chocauto/Controllers/AppController.dart';
 import 'package:chocauto/Models/Chocadeira.dart';
 import 'package:flutter/material.dart';
@@ -18,58 +16,47 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  List<Chocadeira> _chocadeiras = [];
+  @override
+  void initState() {
+    _chocadeiras = AppController.getChocadeiras().values.toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFefefef),
-      body:
-     Stack(
-      fit: StackFit.expand,
-      children: [
-       Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                child: LabelComponent(
-                  labelText: "Dashboard",
-                )),
-          ),
-          Expanded(
-              flex: MediaQuery.of(context).size.height > 450
-                  ? 4
-                  : MediaQuery.of(context).size.height > 350
-                      ? 2
-                      : 1,
-              child: ValueListenableBuilder<Box<Chocadeira>>(
-                  valueListenable: AppController.getChocadeiras().listenable(),
-                  builder: (context, box, _) {
-                    return ListView.builder(
-                        itemCount: box.length,
-                        itemBuilder: (context, index) => chocadeiras(
-                            chocadeira: box.values.elementAt(index),
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      ChocadeiraEstatistica(
-                                    chocadeira: box.values.elementAt(index),
-                                    title: box.values.elementAt(index).nome,
-                                    device: new BluetoothDevice(
-                                        address: box.values
-                                            .elementAt(index)
-                                            .bluetoothDevice),
-                                  ),
-                                  fullscreenDialog: true,
-                                )),
-                            leading: CircleAvatar(
-                              backgroundImage: AssetImage('images/logo.png'),
-                            )));
-                  })),
-                 
-        ],
-      ),buildFloatingSearchBar(),]),
+      body: Stack(fit: StackFit.expand, children: [
+        Container(
+            margin: EdgeInsets.only(top: 50),
+            child: ValueListenableBuilder<Box<Chocadeira>>(
+                valueListenable: AppController.getChocadeiras().listenable(),
+                builder: (context, box, _) {
+                  return ListView.builder(
+                      itemCount: box.length,
+                      itemBuilder: (context, index) => chocadeiras(
+                          chocadeira: box.values.elementAt(index),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    ChocadeiraEstatistica(
+                                  chocadeira: box.values.elementAt(index),
+                                  title: box.values.elementAt(index).nome,
+                                  device: new BluetoothDevice(
+                                      address: box.values
+                                          .elementAt(index)
+                                          .bluetoothDevice),
+                                ),
+                                fullscreenDialog: true,
+                              )),
+                          leading: CircleAvatar(
+                            backgroundImage: AssetImage('images/logo.png'),
+                          )));
+                })),
+        buildFloatingSearchBar(),
+      ]),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Color(0xFFffecb3),
@@ -109,7 +96,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ),
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25))),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
           ),
         ));
   }
@@ -119,17 +106,23 @@ class _HomePageScreenState extends State<HomePageScreen> {
         MediaQuery.of(context).orientation == Orientation.portrait;
 
     return FloatingSearchBar(
-      hint: 'Search...',
+      hint: 'Pesquisar chocadeiras...',
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       transitionDuration: const Duration(milliseconds: 800),
       transitionCurve: Curves.easeInOut,
       physics: const BouncingScrollPhysics(),
       axisAlignment: isPortrait ? 0.0 : -1.0,
       openAxisAlignment: 0.0,
-      width: isPortrait ? 600 : 500,
-      debounceDelay: const Duration(milliseconds: 500),
+      width: MediaQuery.of(context).size.width * 0.95,
+      debounceDelay: const Duration(milliseconds: 200),
       onQueryChanged: (query) {
-        // Call your model, bloc, controller here.
+        setState(() {
+          _chocadeiras = AppController.getChocadeiras()
+              .values
+              .where((element) =>
+                  element.nome.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+        });
       },
       // Specify a custom transition to be used for
       // animating between opened and closed stated.
@@ -154,8 +147,24 @@ class _HomePageScreenState extends State<HomePageScreen> {
             elevation: 4.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: Colors.accents.map((color) {
-                return Container(height: 112, color: color);
+              children: _chocadeiras.map((e) {
+                return chocadeiras(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              ChocadeiraEstatistica(
+                            chocadeira: e,
+                            title: e.nome,
+                            device:
+                                new BluetoothDevice(address: e.bluetoothDevice),
+                          ),
+                          fullscreenDialog: true,
+                        )),
+                    leading: CircleAvatar(
+                      backgroundImage: AssetImage('images/logo.png'),
+                    ),
+                    chocadeira: e);
               }).toList(),
             ),
           ),

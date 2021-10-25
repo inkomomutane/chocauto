@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
           },
-          children: <Widget>[TestUI(),TestUI()],
+          children: <Widget>[HomePageScreen(),EstatisticaScreen()],
         ),
       ),
       bottomNavigationBar: NavyBar(

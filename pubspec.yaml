@@ -53,6 +53,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.3.46
   syncfusion_flutter_charts: ^19.3.46
   material_floating_search_bar: ^0.3.6
+  syncfusion_flutter_datagrid: ^19.3.46
 
 dev_dependencies:
   flutter_native_splash: ^1.2.1
