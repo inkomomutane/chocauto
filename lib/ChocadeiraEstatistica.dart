@@ -40,12 +40,14 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
   bool angle = false;
   String temperature = "0";
   String humidity = "0";
+  String terminal = "5";
 
   @override
   void initState() {
     angle = false;
     temperature = "0";
     humidity = "0";
+    terminal = "5";
     super.initState();
 
     BluetoothConnection.toAddress(device.address).then((_connection) {
@@ -65,8 +67,10 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
         // If we didn't except this (no flag set), it means closing by remote.
         if (isDisconnecting) {
           print('Disconectando localmente!');
+          terminal = 'Disconectando localmente!';
         } else {
           print('Disconectando remotamente!');
+          terminal = 'isconectando remotamente!';
         }
         if (this.mounted) {
           setState(() {});
@@ -91,11 +95,14 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
   }
 
   void _onDataReceived(Uint8List data) {
-    String datax = utf8.decode(data);
+    String datax = utf8.decode(data, allowMalformed: true);
+
     List<String> datas = datax.split("%");
-    //print(datax);
+    print(datas);
 
     setState(() {
+      terminal = datax;
+      debugPrint(terminal);
       if (datas.length > 1) {
         if (datas[0].isNotEmpty && datas[1].isNotEmpty) {
           this.temperature = datas[0];
@@ -145,6 +152,7 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
   }
 
   void _sendData(int text) async {
+   // print(text);
     if (text > 0) {
       try {
         connection!.output.add(Uint8List.fromList([text]));
@@ -167,7 +175,7 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
       ),
       body: ListView(
         children: [
-          LabelComponent(labelText: "Temperatura e Humidade actual"),
+          LabelComponent(labelText: "Temperatura e humidade actual"),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
             child: Container(
@@ -255,7 +263,7 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
             onTap: () {
               setState(() {
                 up = !up;
-                _sendData(up ? 90 : 2);
+                _sendData(up ? 45 : 2);
               });
             },
             child: Container(
@@ -288,14 +296,14 @@ class _ChocadeiraEstatisticaState extends State<ChocadeiraEstatistica> {
                         ],
                         pointers: <GaugePointer>[
                           NeedlePointer(
-                            value: up ? 90 : 0,
+                            value: up ? 45 : 0,
                             enableAnimation: true,
                           )
                         ],
                         annotations: <GaugeAnnotation>[
                           GaugeAnnotation(
                               widget: Container(
-                                  child: Text('${up ? 90 : 0}⁰',
+                                  child: Text('${up ? 45 : 0}⁰',
                                       style: TextStyle(
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold))),
